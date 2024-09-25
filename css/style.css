@@ -37,7 +37,7 @@ h1, h2, h3, h4, h5, h6, figure {
   background-size: cover;
   background-attachment: fixed;
   position: relative;
-  height: 600px;
+  height: 100%;
   width: 100%;
 }
 #fh5co-header .overlay,
@@ -114,7 +114,7 @@ h1, h2, h3, h4, h5, h6, figure {
   height: 200px;
   width: 200px;
   margin: 0 auto;
-  margin-bottom: 30px;
+  margin-bottom: -30px;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
   -ms-border-radius: 50%;
