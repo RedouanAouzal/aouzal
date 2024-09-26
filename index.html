@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML> 
 <html>
 <head>
     <meta charset="utf-8">
@@ -9,7 +9,6 @@
     <meta name="keywords" content="Website Template by Aouzal.com, html5, css3, mobile first, responsive" />
     <meta name="author" content="Aouzal.com" />
 
-    <!-- Facebook and Twitter integration -->
     <meta property="og:title" content=""/>
     <meta property="og:image" content=""/>
     <meta property="og:url" content=""/>
@@ -22,36 +21,24 @@
 
     <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
-    
-    <!-- Animate.css -->
     <link rel="stylesheet" href="css/animate.css">
-    <!-- Icomoon Icon Fonts-->
     <link rel="stylesheet" href="css/icomoon.css">
-    <!-- Bootstrap  -->
     <link rel="stylesheet" href="css/bootstrap.css">
-
-    <!-- Theme style  -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- Modernizr JS -->
     <script src="js/modernizr-2.6.2.min.js"></script>
-    <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
     <script src="js/respond.min.js"></script>
     <![endif]-->
-
-    <!-- QRCode.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
-        /* إخفاء QR code في البداية */
         #qrCode {
             display: none;
             border: 10px solid white;
             padding: 0px;
             display: inline-block;
         }
-         /* إخفاء زر التحميل في البداية */
         #downloadBtn {
             display: none;
             margin-top: 10px;
@@ -85,7 +72,6 @@
                                     </ul>
                                 </p>
 
-                                <!-- QR Code Generator Section -->
                                <div class="container text-center" style="margin-top: 30px;">
                                     <input type="text" id="link" placeholder="Qr-Code (URL, WiFi, phone number & Message ...)" style="padding: 8px; width: 300px;">
                                     <br>
@@ -97,26 +83,16 @@
                                     <div id="message" style="margin-top: 10px; color: green;"></div>
                                 </div>
 
-                                <!-- jQuery -->
                                 <script src="js/jquery.min.js"></script>
-                                <!-- jQuery Easing -->
                                 <script src="js/jquery.easing.1.3.js"></script>
-                                <!-- Bootstrap -->
                                 <script src="js/bootstrap.min.js"></script>
-                                <!-- Waypoints -->
                                 <script src="js/jquery.waypoints.min.js"></script>
-                                <!-- Stellar Parallax -->
                                 <script src="js/jquery.stellar.min.js"></script>
-                                <!-- Easy PieChart -->
                                 <script src="js/jquery.easypiechart.min.js"></script>
-                                <!-- Google Map -->
                                 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
                                 <script src="js/google_map.js"></script>
-                                
-                                <!-- Main -->
                                 <script src="js/main.js"></script>
 
-                                 <!-- QR Code Generation and Download Script -->
                                 <script>
                                     function generateQRCode() {
                                         var link = document.getElementById("link").value;
@@ -124,31 +100,31 @@
                                         var messageElement = document.getElementById("message");
                                         var downloadBtn = document.getElementById("downloadBtn");
 
-                                        qrCodeElement.innerHTML = ""; // مسح الـ QR code السابق
-                                        messageElement.innerHTML = ""; // مسح الرسالة السابقة
-                                        downloadBtn.style.display = "none"; // إخفاء زر التحميل مؤقتًا
+                                        qrCodeElement.innerHTML = "";
+                                        messageElement.innerHTML = "";
+                                        downloadBtn.style.display = "none";
 
                                         if (link) {
-                                            qrCodeElement.style.display = "inline-block"; // إظهار إطار QR code
+                                            qrCodeElement.style.display = "inline-block";
                                             new QRCode(qrCodeElement, {
                                                 text: link,
                                                 width: 128,
                                                 height: 128
                                             });
                                             messageElement.innerHTML = "Successfully done";
-                                            downloadBtn.style.display = "inline-block"; // إظهار زر التحميل بعد إنشاء QR code
+                                            downloadBtn.style.display = "inline-block";
                                         } else {
                                             messageElement.innerHTML = "Try Again";
                                         }
                                     }
 
                                     function downloadQRCode() {
-                                        var qrCodeCanvas = document.querySelector('#qrCode canvas'); // الحصول على عنصر canvas
-                                        var image = qrCodeCanvas.toDataURL("image/png"); // تحويل canvas إلى صورة
-                                        var link = document.createElement('a'); // إنشاء رابط لتحميل الصورة
+                                        var qrCodeCanvas = document.querySelector('#qrCode canvas');
+                                        var image = qrCodeCanvas.toDataURL("image/png");
+                                        var link = document.createElement('a');
                                         link.href = image;
-                                        link.download = 'qrcode.png'; // اسم الملف الذي سيتم تحميله
-                                        link.click(); // تنفيذ عملية التحميل
+                                        link.download = 'qrcode.png';
+                                        link.click();
                                     }
                                 </script>
 
