@@ -47,9 +47,11 @@
         /* إخفاء QR code في البداية */
         #qrCode {
             display: none;
-            border: 10px solid white;
+            border: 0px solid white; /* الحدود 0 قبل الضغط */
             padding: 0px;
             display: inline-block;
+            border-radius: 15px;
+            transition: border 0.3s; /* لإضافة حركة انتقالية أثناء التغيير */
         }
          /* إخفاء زر التحميل في البداية */
         #downloadBtn {
@@ -130,6 +132,7 @@
 
                                         if (link) {
                                             qrCodeElement.style.display = "inline-block"; // إظهار إطار QR code
+                                            qrCodeElement.style.border = "10px solid white"; // تغيير الحدود بعد الضغط على الزر
                                             new QRCode(qrCodeElement, {
                                                 text: link,
                                                 width: 128,
