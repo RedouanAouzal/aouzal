@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Dimension Checker</title>
+    <style>
+        .photo-container {
+            width: 2in;
+            height: 2in;
+            border: 2px solid black;
+            position: relative;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: scale-down;
+        }
+
+        .top-line {
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background-color: red;
+            top: 0;
+            cursor: ns-resize;
+        }
+
+        .bottom-pink {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 0.375in;
+            background-color: rgba(255, 182, 193, 0.5);
+            top: 1in;
+            cursor: ns-resize;
+        }
+
+        .middle-green {
+            position: absolute;
+            bottom: 1.125in;
+            left: 0;
+            width: 100%;
+            height: 0.25in;
+            background-color: rgba(144, 238, 144, 0.5);
+        }
+
+        .vertical-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1px;
+            height: 100%;
+            background-color: transparent;
+            border-left: 0.25px dashed black;
+            opacity: 25%;
+        }
+
+        .photo-instructions {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .photo-details {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            overflow: hidden;
+            table-layout: fixed;
+        }
+
+        .photo-details th, .photo-details td {
+            padding: 5px;
+            text-align: left; /* Align text to the left */
+            border: 1px solid #ccc;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .photo-details th {
+            background-color: #f2f2f2;
+            width: 50%;
+        }
+
+        .photo-details td {
+            width: 50%;
+        }
+
+        .upload-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .upload-button:hover {
+            background-color: #45a049;
+        }
+
+        .more-button {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 5px 10px;
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .more-button:hover {
+            background-color: #007B9A;
+        }
+
+        .popup {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="photo-instructions">
+        DV Lottery Photo Checker
+    </div>
+
+    <div class="photo-container" id="photoBox">
+        <div class="top-line" id="topLine"></div>
+        <div class="middle-green"></div>
+        <div class="bottom-pink" id="bottomPink"></div>
+        <div class="vertical-line"></div>
+    </div>
+
+    <input type="file" id="uploadPhoto" accept=".jpeg, .jpg" style="display: none;">
+    <button class="upload-button" id="uploadButton">Upload New Image</button>
+
+    <table class="photo-details" id="photoInfo" style="display: none;">
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody id="photoDetailsBody"></tbody>
+    </table>
+
+    <script>
+        function makeDraggable(element, pairedElement, container, isTopLine = true) {
+            let startY = 0, initialTop = 0, containerHeight = container.clientHeight;
+
+            element.onmousedown = function (e) {
+                e.preventDefault();
+                startY = e.clientY;
+                initialTop = element.offsetTop;
+                document.onmousemove = onDrag;
+                document.onmouseup = stopDrag;
+            };
+
+            function onDrag(e) {
+                let diffY = e.clientY - startY;
+                let newTop = initialTop + diffY;
+                let inchToPx = 96;
+
+                if (isTopLine) {
+                    if (newTop >= 0 && newTop <= containerHeight - inchToPx - pairedElement.clientHeight) {
+                        element.style.top = newTop + 'px';
+                        pairedElement.style.top = (newTop + inchToPx) + 'px';
+                    }
+                } else {
+                    if (newTop >= inchToPx && newTop <= containerHeight - element.clientHeight) {
+                        element.style.top = newTop + 'px';
+                        pairedElement.style.top = (newTop - inchToPx) + 'px';
+                    }
+                }
+            }
+
+            function stopDrag() {
+                document.onmousemove = null;
+                document.onmouseup = null;
+            }
+        }
+
+        const topLine = document.getElementById('topLine');
+        const bottomPink = document.getElementById('bottomPink');
+        const container = document.querySelector('.photo-container');
+
+        makeDraggable(topLine, bottomPink, container, true);
+        makeDraggable(bottomPink, topLine, container, false);
+
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            document.getElementById('uploadPhoto').click();
+        });
+
+        document.getElementById('uploadPhoto').addEventListener('change', function(event) {
+            const photoBox = document.getElementById('photoBox');
+            const file = event.target.files[0];
+
+            if (file) {
+                const fileSizeInKo = file.size / 1024;
+                if (fileSizeInKo > 240) {
+                    alert("Image size must not exceed 240 kilobytes.");
+                    return;
+                }
+
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+
+                img.onload = function() {
+                    if (img.width !== 600 || img.height !== 600) {
+                        alert("Image dimensions must be 600 × 600 pixels.");
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        photoBox.innerHTML = '';
+                        photoBox.appendChild(img);
+
+                        const newTopLine = document.createElement('div');
+                        newTopLine.className = 'top-line';
+                        const newBottomPink = document.createElement('div');
+                        newBottomPink.className = 'bottom-pink';
+
+                        const newMiddleGreen = document.createElement('div');
+                        newMiddleGreen.className = 'middle-green';
+
+                        photoBox.appendChild(newTopLine);
+                        photoBox.appendChild(newMiddleGreen);
+                        photoBox.appendChild(newBottomPink);
+                        photoBox.appendChild(document.createElement('div'));
+
+                        makeDraggable(newTopLine, newBottomPink, container, true);
+                        makeDraggable(newBottomPink, newTopLine, container, false);
+
+                        displayExifInfo(file, fileSizeInKo);
+                    };
+
+                    reader.readAsDataURL(file);
+                };
+            }
+        });
+
+        function displayExifInfo(file, fileSizeInKo) {
+            const photoDetailsBody = document.getElementById('photoDetailsBody');
+            photoDetailsBody.innerHTML = '';
+            const photoInfoTable = document.getElementById('photoInfo');
+
+            const sizeRow = document.createElement('tr');
+            const sizeCell1 = document.createElement('td');
+            const sizeCell2 = document.createElement('td');
+
+            sizeCell1.innerText = "Image Size";
+            sizeCell2.innerText = fileSizeInKo.toFixed(2) + " KB";
+
+            sizeRow.appendChild(sizeCell1);
+            sizeRow.appendChild(sizeCell2);
+            photoDetailsBody.appendChild(sizeRow);
+
+            const dimensionRow = document.createElement('tr');
+            const dimensionCell1 = document.createElement('td');
+            const dimensionCell2 = document.createElement('td');
+
+            dimensionCell1.innerText = "Image Dimensions";
+            dimensionCell2.innerText = "600 × 600 pixels";
+
+            dimensionRow.appendChild(dimensionCell1);
+            dimensionRow.appendChild(dimensionCell2);
+            photoDetailsBody.appendChild(dimensionRow);
+
+            const typeRow = document.createElement('tr');
+            const typeCell1 = document.createElement('td');
+            const typeCell2 = document.createElement('td');
+
+            typeCell1.innerText = "Image Type";
+            typeCell2.innerText = file.type;
+
+            typeRow.appendChild(typeCell1);
+            typeRow.appendChild(typeCell2);
+            photoDetailsBody.appendChild(typeRow);
+
+            const sourceRow = document.createElement('tr');
+            const sourceCell1 = document.createElement('td');
+            const sourceCell2 = document.createElement('td');
+
+            sourceCell1.innerText = "Image Source";
+            sourceCell2.innerText = "Not Available";
+
+            sourceRow.appendChild(sourceCell1);
+            sourceRow.appendChild(sourceCell2);
+            photoDetailsBody.appendChild(sourceRow);
+
+            const dateRow = document.createElement('tr');
+            const dateCell1 = document.createElement('td');
+            const dateCell2 = document.createElement('td');
+
+            dateCell1.innerText = "Creation Date";
+            dateCell2.innerText = new Date(file.lastModified).toLocaleDateString('en-US');
+
+            dateRow.appendChild(dateCell1);
+            dateRow.appendChild(dateCell2);
+            photoDetailsBody.appendChild(dateRow);
+
+            EXIF.getData(file, function() {
+                const allMetaData = EXIF.getAllTags(this);
+
+                for (const tag in allMetaData) {
+                    if (allMetaData.hasOwnProperty(tag)) {
+                        const row = document.createElement('tr');
+                        const cell1 = document.createElement('td');
+                        const cell2 = document.createElement('td');
+
+                        cell1.innerText = tag;
+                        cell2.innerText = allMetaData[tag];
+
+                        row.appendChild(cell1);
+                        row.appendChild(cell2);
+                        photoDetailsBody.appendChild(row);
+                    }
+                }
+
+                photoInfoTable.style.display = 'table';
+            });
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
+</body>
+</html>
