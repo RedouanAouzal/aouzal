@@ -9,28 +9,15 @@
     <meta name="keywords" content="Website Template by Aouzal.com, html5, css3, mobile first, responsive" />
     <meta name="author" content="Aouzal.com" />
 
-    <meta property="og:title" content=""/>
-    <meta property="og:image" content=""/>
-    <meta property="og:url" content=""/>
-    <meta property="og:site_name" content=""/>
-    <meta property="og:description" content=""/>
-    <meta name="twitter:title" content="" />
-    <meta name="twitter:image" content="" />
-    <meta name="twitter:url" content="" />
-    <meta name="twitter:card" content="" />
-
     <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
     
-
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
     
     <script src="js/modernizr-2.6.2.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <style>
         #qrCode {
@@ -50,6 +37,21 @@
             border: none;
             cursor: pointer;
         }
+        /* تصميم زر فحص الصور بلون أبيض */
+        #checkImageBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: white;
+            color: black;
+            border: 2px solid #007BFF;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #checkImageBtn:hover {
+            background-color: #007BFF;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -66,7 +68,11 @@
                             <div class="display-tc js-fullheight animate-box" data-animate-effect="fadeIn">
                                 <div class="profile-thumb" style="background: url(images/user-3.jpg);"></div>
                                 <h1><span>Redouan Aouzal</span></h1>
-                                <h3><span> Concepteur Industriel / CG Artist </span></h3>
+                                <h3><span>Concepteur Industriel / CG Artist</span></h3>
+                                
+                                <!-- زر التوجيه لصفحة فحص الصور بلون أبيض -->
+                                <button id="checkImageBtn" onclick="window.location.href='check-image.html'">اذهب إلى صفحة فحص الصور</button>
+
                                 <p>
                                     <ul class="fh5co-social-icons">
                                         <li><a href="https://www.facebook.com/redouan.aouzal.7/"><i class="icon-facebook2"></i></a></li>
@@ -74,7 +80,7 @@
                                     </ul>
                                 </p>
 
-                               <div class="container text-center" style="margin-top: 30px;">
+                                <div class="container text-center" style="margin-top: 30px;">
                                     <input type="text" id="link" placeholder="Qr-Code (URL, WiFi, phone number & Message ...)" style="padding: 8px; width: 300px;">
                                     <br>
                                     <button onclick="generateQRCode()" style="padding: 8px 15px; margin-top: 8px;">Run</button>
